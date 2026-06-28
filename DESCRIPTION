@@ -2,7 +2,7 @@ Package: BJM
 Title: Backward Joint Model (BJM) for the Dynamic Prediction of Both Time-to-Event and Longitudinal Outcomes
 Version: 0.1.0
 Authors@R: c(
-    person("Wenhao", "li", email = "wenhaoli.jlu@gmail.com", role = c("aut", "cre"),
+    person("Wenhao", "Li", email = "wenhaoli.jlu@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5050-443X")),
     person("Liang", "Li", role = c('aut'),email = "LLi15@mdanderson.org"))
 Maintainer: Wenhao Li <wenhaoli.jlu@gmail.com>
