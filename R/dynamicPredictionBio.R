@@ -38,6 +38,7 @@
 #' 
 #' @examples 
 #' 
+#' \donttest{
 #' data(pbc3)
 #' 
 #' data.survival.fitting =  pbc3[!duplicated(pbc3$id), ]
@@ -97,6 +98,8 @@
 #'                                  horizon = 3, time_variable = "year",
 #'                                  survivalVariableAll, survivalTransFunction,
 #'                                  bandcount2 = 40, bandcount3 = 400)
+#' 
+#' }
 #' 
 #' @export
 dynamicPredictionBio = function(bio_i, data.predict.all, long_fit_all, survival_fit_all, 

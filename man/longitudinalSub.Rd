@@ -55,6 +55,7 @@ predictor variables on several longitudinal outcomes while considering the inher
 variability in the data due to random effects.
 }
 \examples{
+\donttest{
 
 LongSubFixed = list(
   "long1" = serBilir ~ year + age + sex +  (years) + (years) * year,  
@@ -91,5 +92,7 @@ for(i in 1:length(LongSubFixed)){
 
 # fitting longitudinal submodel
 long_fit_all = longitudinalSub(data.fit.all, LongSubFixed, LongSubRandom)
+
+}
 
 }

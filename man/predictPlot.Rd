@@ -72,7 +72,7 @@ Plot of risk and future biomarker with density using dynamic prediction.
 This function gives the risk and biomarker prediction plot.
 }
 \examples{
-
+\donttest{
 data(pbc3)
 
 data.survival.fitting =  pbc3[!duplicated(pbc3$id), ]
@@ -131,5 +131,7 @@ predictPlot(data.predict.all.pre, long_fit_all, survival_fit_all,
             horizon = seq(0.5, 3.0, 0.5), time_variable = "year",
             survivalVariableAll, survivalTransFunction,
            bandcount1 = 10, bandcount2 = 10, bandcount3 = 200)
-           
+       
+}
+    
 }

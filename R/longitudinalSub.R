@@ -38,6 +38,7 @@
 #' respectively, mirror the inputs provided to the model.
 #' 
 #' @examples 
+#' \donttest{
 #' 
 #' LongSubFixed = list(
 #'   "long1" = serBilir ~ year + age + sex +  (years) + (years) * year,  
@@ -74,6 +75,8 @@
 #' 
 #' # fitting longitudinal submodel
 #' long_fit_all = longitudinalSub(data.fit.all, LongSubFixed, LongSubRandom)
+#' 
+#' }
 #' 
 #' @export
 longitudinalSub <- function(data.fit.all, LongSubFixed, LongSubRandom) {

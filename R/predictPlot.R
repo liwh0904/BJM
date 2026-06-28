@@ -36,7 +36,7 @@
 #' @return Plot of risk and future biomarker with density using dynamic prediction.
 #' 
 #' @examples 
-#' 
+#' \donttest{
 #' data(pbc3)
 #' 
 #' data.survival.fitting =  pbc3[!duplicated(pbc3$id), ]
@@ -95,7 +95,9 @@
 #'             horizon = seq(0.5, 3.0, 0.5), time_variable = "year",
 #'             survivalVariableAll, survivalTransFunction,
 #'            bandcount1 = 10, bandcount2 = 10, bandcount3 = 200)
-#'            
+#'        
+#' }
+#'     
 #' @export
 predictPlot = function(data.predict.all.one, long_fit_all, survival_fit_all, 
                     prediction.time = 4, horizon = seq(0.0, 3.0, 0.5), time_variable,
