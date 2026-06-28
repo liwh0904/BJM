@@ -1,4 +1,4 @@
-# ── Internal formatting helper (not exported) ──────────────────────────────────
+# -- Internal formatting helper (not exported) ----------------------------------
 .format_survivalSub <- function(x, digits = 4, extended = FALSE) {
 
   sep_line  <- paste(rep("=", 65), collapse = "")
@@ -11,7 +11,7 @@
   has_cr      <- !is.null(glm_fit)
   s_cox       <- summary(coxph_fit)
 
-  # ── Header ────────────────────────────────────────────────────────────
+  # -- Header ------------------------------------------------------------
   cat("\n")
   cat("Call:\n")
   cat(sprintf("survivalSub(formMarginalSurv = %s",
@@ -21,7 +21,7 @@
                 deparse(glm_form, width.cutoff = 50L)))
   cat(")\n")
 
-  # ── Data descriptives ─────────────────────────────────────────────────
+  # -- Data descriptives -------------------------------------------------
   cat("\n")
   cat("Data Descriptives:\n")
   cat(sprintf("  Number of subjects        : %d\n", coxph_fit$n))
@@ -35,7 +35,7 @@
                 as.integer(n_ev - n_cr)))
   }
 
-  # ── Marginal Survival Sub-model ───────────────────────────────────────
+  # -- Marginal Survival Sub-model ---------------------------------------
   cat("\n", sep_line, "\n", sep = "")
   cat(" Marginal Survival Sub-model  [Cox PH]\n")
   cat(dash_line, "\n", sep = "")
@@ -47,7 +47,7 @@
   tab_cox  <- coef_cox[, c("coef", "exp(coef)", "se(coef)", "z", "Pr(>|z|)"),
                         drop = FALSE]
   colnames(tab_cox) <- c("Coef", "exp(Coef)", "SE", "z", "p-value")
-  printCoefmat(tab_cox,
+  stats::printCoefmat(tab_cox,
                digits       = digits,
                P.values     = TRUE,
                has.Pvalue   = TRUE,
@@ -69,7 +69,7 @@
               s_cox$sctest["test"], s_cox$sctest["df"],
               s_cox$sctest["pvalue"]))
 
-  # ── Extended: baseline hazard summary ─────────────────────────────────
+  # -- Extended: baseline hazard summary ---------------------------------
   if (extended) {
     bh <- survival::basehaz(coxph_fit, centered = FALSE)
     cat(sprintf("\n  Baseline cumulative hazard range: [%.4f, %.4f]\n",
@@ -78,7 +78,7 @@
                 min(bh$time), max(bh$time)))
   }
 
-  # ── Conditional Competing-Risks Sub-model ─────────────────────────────
+  # -- Conditional Competing-Risks Sub-model -----------------------------
   if (has_cr) {
     cat("\n", sep_line, "\n", sep = "")
     cat(" Conditional Competing-Risks Sub-model  [Logistic GLM]\n")
@@ -90,7 +90,7 @@
     s_glm   <- summary(glm_fit)
     tab_glm <- s_glm$coefficients
     colnames(tab_glm) <- c("Coef", "SE", "z", "p-value")
-    printCoefmat(tab_glm,
+    stats::printCoefmat(tab_glm,
                  digits       = digits,
                  P.values     = TRUE,
                  has.Pvalue   = TRUE,
@@ -102,7 +102,7 @@
     cat(sprintf("  Null deviance     : %.2f  on %d df\n",
                 glm_fit$null.deviance, glm_fit$df.null))
     cat(sprintf("  Residual deviance : %.2f  on %d df\n",
-                deviance(glm_fit), glm_fit$df.residual))
+                stats::deviance(glm_fit), glm_fit$df.residual))
     cat(sprintf("  AIC : %.2f\n", stats::AIC(glm_fit)))
 
     if (extended) {
@@ -179,14 +179,14 @@ summary.survivalSub.BJM <- function(object, digits = 4, ...) {
 }
 
 
-# keep the old name working as an alias for backward compatibility
+#' @rdname print.survivalSub.BJM
 #' @export
 print_survivalSub <- function(x, digits = 4, ...) {
   print.survivalSub.BJM(x, digits = digits, ...)
 }
 
 
-# ── Internal formatting helper for longitudinalSub (not exported) ──────────────
+# -- Internal formatting helper for longitudinalSub (not exported) --------------
 .format_longitudinalSub <- function(x, digits = 4, extended = FALSE) {
 
   sep_line  <- paste(rep("=", 65), collapse = "")
@@ -232,9 +232,9 @@ print_survivalSub <- function(x, digits = 4, ...) {
     fe   <- nlme::fixef(fit_m)
     se   <- sqrt(diag(fit_m$varFix))
     tval <- fe / se
-    pval <- 2 * pt(abs(tval), df = fit_m$fixDF$terms[1], lower.tail = FALSE)
+    pval <- 2 * stats::pt(abs(tval), df = fit_m$fixDF$terms[1], lower.tail = FALSE)
     tab_fe <- cbind(Value = fe, SE = se, t = tval, "p-value" = pval)
-    printCoefmat(tab_fe,
+    stats::printCoefmat(tab_fe,
                  digits       = digits,
                  P.values     = TRUE,
                  has.Pvalue   = TRUE,
@@ -246,8 +246,8 @@ print_survivalSub <- function(x, digits = 4, ...) {
     cat(sprintf("  Residual std. error (sigma): %.4f\n", fit_m$sigma))
     cat(sprintf("  n (subjects) = %d,  N (observations) = %d\n",
                 fit_m$dims$ngrps[1], fit_m$dims$N))
-    cat(sprintf("  Log-likelihood: %.2f\n", logLik(fit_m)[1]))
-    cat(sprintf("  AIC: %.2f,  BIC: %.2f\n", AIC(fit_m), BIC(fit_m)))
+    cat(sprintf("  Log-likelihood: %.2f\n", stats::logLik(fit_m)[1]))
+    cat(sprintf("  AIC: %.2f,  BIC: %.2f\n", stats::AIC(fit_m), stats::BIC(fit_m)))
 
     if (extended) {
       vc <- nlme::getVarCov(fit_m)
@@ -308,6 +308,7 @@ summary.longitudinalSub.BJM <- function(object, digits = 4, ...) {
 
 
 # backward-compatible alias
+#' @rdname print.longitudinalSub.BJM
 #' @export
 print_longitudinalSub <- function(x, digits = 4, ...) {
   print.longitudinalSub.BJM(x, digits = digits, ...)
@@ -323,7 +324,7 @@ print_longitudinalSub <- function(x, digits = 4, ...) {
 #' @export
 print_BJM <- function(long_fit_all, survival_fit_all, digits = 4) {
   cat("\n")
-  cat("Backward Joint Model (BJM) — Model Summary\n")
+  cat("Backward Joint Model (BJM) - Model Summary\n")
   print.longitudinalSub.BJM(long_fit_all,  digits = digits)
   print.survivalSub.BJM(survival_fit_all,  digits = digits)
   invisible(list(long_fit_all = long_fit_all,
@@ -331,7 +332,7 @@ print_BJM <- function(long_fit_all, survival_fit_all, digits = 4) {
 }
 
 
-# ── Internal formatting helper for dynamicPrediction (not exported) ────────────
+# -- Internal formatting helper for dynamicPrediction (not exported) ------------
 .format_dynamicPrediction <- function(x, digits = 4,
                                       prediction.time = NULL,
                                       horizon = NULL,
@@ -349,7 +350,7 @@ print_BJM <- function(long_fit_all, survival_fit_all, digits = 4) {
               paste0("S", seq_len(n_subj))
 
   cat("\n", sep_line, "\n", sep = "")
-  cat(" Dynamic Prediction — Event Risk\n")
+  cat(" Dynamic Prediction - Event Risk\n")
   cat(dash_line, "\n", sep = "")
   if (!is.null(prediction.time))
     cat(sprintf("  Prediction time   : %g\n", prediction.time))
@@ -385,7 +386,7 @@ print_BJM <- function(long_fit_all, survival_fit_all, digits = 4) {
     cat(dash_line, "\n", sep = "")
     if (!has_cr) {
       cat(sprintf("  Mean : %.4f\n", mean(risk0, na.rm = TRUE)))
-      cat(sprintf("  SD   : %.4f\n", sd(risk0,   na.rm = TRUE)))
+      cat(sprintf("  SD   : %.4f\n", stats::sd(risk0,   na.rm = TRUE)))
       cat(sprintf("  Min / Max : %.4f / %.4f\n",
                   min(risk0, na.rm = TRUE), max(risk0, na.rm = TRUE)))
     } else {
@@ -394,9 +395,9 @@ print_BJM <- function(long_fit_all, survival_fit_all, digits = 4) {
                   mean(risk1, na.rm = TRUE),
                   mean(risk0 + risk1, na.rm = TRUE)))
       cat(sprintf("  SD   (Cause 1 / Cause 2 / Total): %.4f / %.4f / %.4f\n",
-                  sd(risk0, na.rm = TRUE),
-                  sd(risk1, na.rm = TRUE),
-                  sd(risk0 + risk1, na.rm = TRUE)))
+                  stats::sd(risk0, na.rm = TRUE),
+                  stats::sd(risk1, na.rm = TRUE),
+                  stats::sd(risk0 + risk1, na.rm = TRUE)))
     }
   }
 
@@ -456,6 +457,7 @@ summary.dynamicPrediction.BJM <- function(object, prediction.time = NULL,
 
 
 # backward-compatible alias
+#' @rdname print.dynamicPrediction.BJM
 #' @export
 print_dynamicPrediction <- function(x, prediction.time = NULL,
                                     horizon = NULL,
@@ -469,7 +471,7 @@ print_dynamicPrediction <- function(x, prediction.time = NULL,
 }
 
 
-# ── Internal formatting helper for dynamicPredictionBio (not exported) ─────────
+# -- Internal formatting helper for dynamicPredictionBio (not exported) ---------
 .format_dynamicPredictionBio <- function(x, digits = 4,
                                          bio_i = NULL,
                                          long_fit_all = NULL,
@@ -496,7 +498,7 @@ print_dynamicPrediction <- function(x, prediction.time = NULL,
   } else "Biomarker"
 
   cat("\n", sep_line, "\n", sep = "")
-  cat(sprintf(" Dynamic Prediction — Future %s\n", bio_name))
+  cat(sprintf(" Dynamic Prediction - Future %s\n", bio_name))
   cat(dash_line, "\n", sep = "")
   if (!is.null(prediction.time))
     cat(sprintf("  Prediction time   : %g\n", prediction.time))
@@ -545,14 +547,14 @@ print_dynamicPrediction <- function(x, prediction.time = NULL,
     cat(dash_line, "\n", sep = "")
     cat(" Predictive Distribution Summary (across subjects)\n")
     cat(dash_line, "\n", sep = "")
-    cat(sprintf("  MAP       — Mean (SD): %.4f (%.4f),  Range: [%.4f, %.4f]\n",
-                mean(Y_predict, na.rm = TRUE), sd(Y_predict, na.rm = TRUE),
+    cat(sprintf("  MAP       - Mean (SD): %.4f (%.4f),  Range: [%.4f, %.4f]\n",
+                mean(Y_predict, na.rm = TRUE), stats::sd(Y_predict, na.rm = TRUE),
                 min(Y_predict,  na.rm = TRUE), max(Y_predict, na.rm = TRUE)))
-    cat(sprintf("  Post.Mean — Mean (SD): %.4f (%.4f)\n",
-                mean(stats_mat[, "Mean"]), sd(stats_mat[, "Mean"])))
-    cat(sprintf("  Post.SD   — Mean (SD): %.4f (%.4f)\n",
-                mean(stats_mat[, "SD"]),   sd(stats_mat[, "SD"])))
-    cat(sprintf("  95%% CI width — Mean: %.4f\n",
+    cat(sprintf("  Post.Mean - Mean (SD): %.4f (%.4f)\n",
+                mean(stats_mat[, "Mean"]), stats::sd(stats_mat[, "Mean"])))
+    cat(sprintf("  Post.SD   - Mean (SD): %.4f (%.4f)\n",
+                mean(stats_mat[, "SD"]),   stats::sd(stats_mat[, "SD"])))
+    cat(sprintf("  95%% CI width - Mean: %.4f\n",
                 mean(stats_mat[, "Upper"] - stats_mat[, "Lower"])))
   }
 
@@ -624,6 +626,7 @@ summary.dynamicPredictionBio.BJM <- function(object, bio_i = NULL,
 
 
 # backward-compatible alias
+#' @rdname print.dynamicPredictionBio.BJM
 #' @export
 print_dynamicPredictionBio <- function(x, bio_i = NULL,
                                        long_fit_all = NULL,
