@@ -115,14 +115,6 @@ dynamicPrediction = function(data.predict.all, long_fit_all, survival_fit_all,
   }
   
   upper_bound = 2 * max(data.predict.all[[1]][survival_variable])
-  
-  #### handle horizon = 0 edge case: probability of event in zero-length window is 0
-  if(horizon <= 0){
-    out <- list(0, NULL)
-    class(out) <- "dynamicPrediction.BJM"
-    return(out)
-  }
-  
   #### time frame used to do the integral
   bandwidth1 = horizon/bandcount1
   predict.time.horizon = seq(prediction.time, prediction.time + horizon, bandwidth1)
